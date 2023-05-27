@@ -182,6 +182,10 @@ apr_status_t ap_http_chunk_filter(ap_filter_t *f, apr_bucket_brigade *b)
                                            /* <trailers> */
                                            ASCII_CRLF, 5, c->bucket_alloc);
             APR_BUCKET_INSERT_BEFORE(eos, e);
+
+            /* immediately flush as there is no further output expected */
+            e = apr_bucket_flush_create(c->bucket_alloc);
+            APR_BUCKET_INSERT_BEFORE(eos, e);
         }
 
         /* pass the brigade to the next filter. */
